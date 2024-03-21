@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
@@ -20,9 +21,9 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        List<Question> questionList = this.questionService.getList();  //리포지터리 대신 서비스를 사용
-        model.addAttribute("questionList", questionList);
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Question> paging = this.questionService.getList(page);  //리포지터리 대신 서비스를 사용
+        model.addAttribute("paging", paging);
         return "question_list";
     }
 
